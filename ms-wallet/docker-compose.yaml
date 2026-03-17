@@ -1,0 +1,17 @@
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: wallets-db
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: mysql
+      MYSQL_DATABASE: wallet_db
+      MYSQL_USER: mysql
+      MYSQL_PASSWORD: mysql
+    ports:
+      - "3232:3306" # Çöldən 3232 ilə girəcəyik, içəridə 3306-ya gedəcək
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+volumes:
+  mysql_data:

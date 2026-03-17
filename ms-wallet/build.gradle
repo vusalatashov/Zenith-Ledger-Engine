@@ -1,0 +1,54 @@
+plugins {
+    id 'java'
+    id 'org.springframework.boot' version '3.4.3' // Stabil ən son versiya
+    id 'io.spring.dependency-management' version '1.1.7'
+}
+
+group = 'com.mswallet'
+version = '0.0.1-SNAPSHOT'
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(21) // LTS (uzunmüddətli dəstək) versiyası tövsiyə olunur
+    }
+}
+
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    // Core & Web
+    implementation 'org.springframework.boot:spring-boot-starter-web' // 'webmvc' yox, sadəcə 'web'
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+
+    // Persistence
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    runtimeOnly 'com.mysql:mysql-connector-j'
+    testImplementation 'com.h2database:h2' // Testlər üçün mütləq lazımdır!
+
+    // MapStruct & Lombok (Ardıcıllıq önəmlidir)
+    implementation 'org.mapstruct:mapstruct:1.6.3'
+    annotationProcessor 'org.mapstruct:mapstruct-processor:1.6.3'
+    compileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
+    // Lombok-un MapStruct ilə işləməsi üçün bu binding mütləqdir:
+    annotationProcessor 'org.projectlombok:lombok-mapstruct-binding:0.2.0'
+
+    // Testing (Bütün test kitabxanalarını bu bir dənəsi əvəz edir)
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+
+    implementation 'org.springframework.retry:spring-retry'
+    implementation 'org.springframework.boot:spring-boot-starter-aop'
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+}
