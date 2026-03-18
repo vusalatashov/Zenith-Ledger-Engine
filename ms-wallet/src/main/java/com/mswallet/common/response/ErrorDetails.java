@@ -1,19 +1,20 @@
-package com.mswallet.infrastructure.exception;
+package com.mswallet.common.response;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Builder;
 import lombok.Getter;
 
-import java.time.LocalDateTime;
 import java.util.Map;
 
+/**
+ * Error Details DTO.
+ * Encapsulates error specifics, including validation failures and request paths.
+ */
 @Getter
 @Builder
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class ErrorResponse {
-    private final String errorCode;
-    private final String message;
-    private final LocalDateTime timestamp;
+public class ErrorDetails {
+    private final String code;
     private final String path;
     private final Map<String, String> validationErrors;
 }

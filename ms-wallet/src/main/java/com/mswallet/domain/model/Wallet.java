@@ -1,9 +1,14 @@
 package com.mswallet.domain.model;
 
+import com.mswallet.infrastructure.exception.BusinessException;
+import lombok.Getter;
+import org.springframework.http.HttpStatus;
+
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.UUID;
 
+@Getter
 public class Wallet {
     private final UUID id;
     private final Long userId;
@@ -22,7 +27,11 @@ public class Wallet {
     public void withdraw(BigDecimal amount) {
         validateAmount(amount);
         if (this.balance.compareTo(amount) < 0) {
-            throw new RuntimeException("Insufficient funds for wallet: " + id);
+            throw new BusinessException(
+                    "Insufficient funds for wallet: " + id,
+                    "INSUFFICIENT_BALANCE",
+                    HttpStatus.BAD_REQUEST
+            );
         }
         this.balance = this.balance.subtract(amount);
     }
@@ -37,21 +46,5 @@ public class Wallet {
         if (amount == null || amount.compareTo(BigDecimal.ZERO) <= 0) {
             throw new IllegalArgumentException("Transaction amount must be positive");
         }
-    }
-
-    public UUID getId() {
-        return id;
-    }
-
-    public Long getUserId() {
-        return userId;
-    }
-
-    public BigDecimal getBalance() {
-        return balance;
-    }
-
-    public String getCurrency() {
-        return currency;
     }
 }

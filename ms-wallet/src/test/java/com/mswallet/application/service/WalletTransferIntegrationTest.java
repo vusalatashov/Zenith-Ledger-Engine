@@ -62,7 +62,7 @@ class WalletTransferIntegrationTest {
 
         assertThrows(RuntimeException.class, () -> {
             transactionTemplate.execute(status -> {
-                walletService.transferMoney(request, key);
+                walletService.transferMoney(request);
                 throw new RuntimeException("Rollback Trigger");
             });
         });
@@ -82,7 +82,7 @@ class WalletTransferIntegrationTest {
 
         // FIX: Added UUID for idempotency
         assertThrows(RuntimeException.class, () ->
-                walletService.transferMoney(request, UUID.randomUUID().toString()));
+                walletService.transferMoney(request));
 
         assertBalances(from.getId(), "100.00", to.getId(), "50.00");
     }
@@ -104,7 +104,7 @@ class WalletTransferIntegrationTest {
                 try {
                     // FIX: Every concurrent request needs a UNIQUE key, otherwise
                     // our new Idempotency logic will block the other 9 threads!
-                    walletService.depositMoney(wallet.getId(), depositAmount, UUID.randomUUID().toString());
+                    walletService.depositMoney(wallet.getId(), depositAmount);
                 } finally {
                     latch.countDown();
                 }
